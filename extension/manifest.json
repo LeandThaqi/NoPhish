@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+  
+    "name": "NoPhish",
+    "description": "This extension will analyze a page and predict if it is a phishing site or not , by using machine learning!",
+    "version": "0.7",
+  
+    "browser_action": {
+     "default_icon": "icon.png",
+     "default_popup": "popup.html"
+    },
+    "icons": { "16": "icon.png",
+        "48": "icon48.png",
+       "128": "icon128.png" },
+    "permissions": [
+     "activeTab"
+     ]
+  }

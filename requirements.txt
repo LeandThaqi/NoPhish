@@ -1,0 +1,8 @@
+joblib >= 0.13.1
+numpy~=1.19.4
+scikit-learn~=0.23.2
+beautifulsoup4~=4.9.3
+whois~=0.9.7
+google
+
+matplotlib~=3.3.3
