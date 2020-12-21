@@ -21,7 +21,7 @@ These are some picture of the tool:<br />
 <img src="images/extension5.PNG" width="30%"/>
 ## Developed with
 
-- Python 3.9:
+- Python 3.9: <br />
   -Python libraries:
   - beatifulsoup4
   - google
