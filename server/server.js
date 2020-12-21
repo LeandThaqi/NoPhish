@@ -2,8 +2,11 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
+const spawn = require("child_process").spawn;
 const { linkType, get } = require("get-content");
 const { json } = require('body-parser');
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -19,9 +22,8 @@ app.post('/detectphishing', function(request, response) {
   console.log('POST /');
   console.dir(request.body);
       const url = request.body.url;
-      console.log(url)
       console.log('==================')
-      if(url === "chrome://newtab/"){
+      if(url.includes('chrome://')){
         dataResponse = {error:'ERROR_NEWTAB'}
         response.writeHead(200, {'Content-Type': 'application/json'});
         response.end(JSON.stringify(dataResponse));
@@ -29,11 +31,8 @@ app.post('/detectphishing', function(request, response) {
       else{
 
         get(url).then((pageContent) => {
-
           fs.writeFileSync('../innerHTML.txt',pageContent)
-    
-          const spawn = require("child_process").spawn;
-          const pythonProcess = spawn('python',["../main.py", url ]);
+          const pythonProcess = spawn('python',["../main.py",url]);
           pythonProcess.stdout.on('data', (data) => {
             response.writeHead(200, {'Content-Type': 'application/json'});
             response.end(data.toString('utf8'));

@@ -1,0 +1,26 @@
+[[1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 0, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1]], 0.05
+
+[[1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, -1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 1]], 0.35
+
+('\n1. Having IP address\n
+2. URL Length\n
+3. URL Shortening service\n
+4. Having @ symbol\n'
+'5. Having double slash\n
+6. Having dash symbol(Prefix Suffix)\n
+7. Having multiple subdomains\n'
+8. Domain Registration Length\n
+9. Favicon\n
+10. HTTP or HTTPS token in domain name\n
+11. Request URL\n
+12. URL of Anchor\n
+13. Links in tags\n
+14. SFH\n
+15. Submitting to email\n
+16. Abnormal URL\n
+17. IFrame\n
+18. Age of Domain\n
+19. DNS Record\n
+20. Web Traffic\n
+21. Google Index\n
+22. Statistical Reports\n')

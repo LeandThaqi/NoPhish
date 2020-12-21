@@ -8,7 +8,8 @@ from sklearn.neighbors import KNeighborsClassifier
 # from sklearn import metrics
 
 import joblib
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
+
 
 labels = []
 data_file = open('dataset/TrainingDataset.arff').read()
@@ -35,14 +36,14 @@ features = features[:, [0, 1, 2, 3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 2
 features = np.array(features).astype(np.float)
 
 # 50/50
-"""
-# BetterRes
-features_train = features[:5531]
-features_test = features[5531:]
-labels_train = labels[:5531]
-labels_test = labels[5531:]
 
-"""
+# BetterRes
+# features_train = features[:5531]
+# features_test = features[5531:]
+# labels_train = labels[:5531]
+# labels_test = labels[5531:]
+
+
 """
 
 features_train = features[5531:]
@@ -66,10 +67,10 @@ labels_test = labels[:5531]
 # 90/10
 
 # BetterRes
-# features_train = features[:9955]
-# features_test = features[9955:]
-# labels_train = labels[:9955]
-# labels_test = labels[9955:]
+features_train = features[:9955]
+features_test = features[9955:]
+labels_train = labels[:9955]
+labels_test = labels[9955:]
 
 
 # features_train = features[9955:]
@@ -78,10 +79,10 @@ labels_test = labels[:5531]
 # labels_test = labels[:9955]
 
 
-features_train = features
-features_test = features
-labels_train = labels
-labels_test = labels
+# features_train = features
+# features_test = features
+# labels_train = labels
+# labels_test = labels
 
 
 # features_test=features[10000:]
@@ -107,5 +108,19 @@ print("Accuracy is :"+str(accuracy))
 # plt.xticks(range(features_train.shape[1]), indices)
 # plt.xlim([-1, features_train.shape[1]])
 # plt.show()
+labels_test = [int(i) for i in labels_test]
+predictions = [int(i) for i in predictions]
 
+
+precision_score = precision_score(labels_test, np.array(predictions))
+recall_score = recall_score(np.array(labels_test), np.array(predictions))
+confusion_matrix = confusion_matrix(np.array(labels_test), np.array(predictions))
+print("Accuracy is :" + str(accuracy))
+print("=========================================")
+print("Precision Score: " + str(precision_score))
+print("=========================================")
+print("Recall Score: " + str(recall_score))
+print("=========================================")
+print("Confusion Matrix: " + str(confusion_matrix))
+print("=========================================")
 # joblib.dump(clf4, 'classifier/knn.pkl', compress=9)

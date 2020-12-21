@@ -8,7 +8,7 @@ from sklearn import svm
 # from sklearn import metrics
 
 import joblib
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
 
 labels = []
 data_file = open('dataset/TrainingDataset.arff').read()
@@ -63,10 +63,10 @@ features = np.array(features).astype(np.float)
 # 90/10
 
 # BetterRes
-# features_train = features[:9955]
-# features_test = features[9955:]
-# labels_train = labels[:9955]
-# labels_test = labels[9955:]
+features_train = features[:9955]
+features_test = features[9955:]
+labels_train = labels[:9955]
+labels_test = labels[9955:]
 
 
 # features_train = features[9955:]
@@ -104,5 +104,19 @@ print("Accuracy is :"+str(accuracy))
 # plt.xticks(range(features_train.shape[1]), indices)
 # plt.xlim([-1, features_train.shape[1]])
 # plt.show()
+labels_test = [int(i) for i in labels_test]
+predictions = [int(i) for i in predictions]
 
+
+precision_score = precision_score(labels_test, np.array(predictions))
+recall_score = recall_score(np.array(labels_test), np.array(predictions))
+confusion_matrix = confusion_matrix(np.array(labels_test), np.array(predictions))
+print("Accuracy is :" + str(accuracy))
+print("=========================================")
+print("Precision Score: " + str(precision_score))
+print("=========================================")
+print("Recall Score: " + str(recall_score))
+print("=========================================")
+print("Confusion Matrix: " + str(confusion_matrix))
+print("=========================================")
 # joblib.dump(clf4, 'classifier/svm.pkl', compress=9)

@@ -11,9 +11,6 @@ import socket
 import whois
 from datetime import datetime
 import time
-
-
-
 from googlesearch import search
 
 # This import is needed only when you run this file in isolation.
@@ -85,15 +82,18 @@ def domain_registration_length(domain):
     registration_length = 0
     # Disa domains nuk kane expiration date
     if expiration_date:
-        registration_length = abs((expiration_date - today).days)
+        if isinstance(expiration_date, list):
+            registration_length = abs((expiration_date[0] - today).days)
+        else:
+            registration_length = abs((expiration_date - today).days)
     return -1 if registration_length / 365 <= 1 else 1
 
 
-def favicon(wiki, soup, domain):
+def favicon(url, soup, domain):
     for head in soup.find_all('head'):
         for head.link in soup.find_all('link', href=True):
             dots = [x.start() for x in re.finditer(r'\.', head.link['href'])]
-            return 1 if wiki in head.link['href'] or len(dots) == 1 or domain in head.link['href'] else -1
+            return 1 if url in head.link['href'] or len(dots) == 1 or domain in head.link['href'] else -1
     return 1
 
 
@@ -214,9 +214,14 @@ def submitting_to_email(soup):
 
 
 def abnormal_url(domain, url):
-    hostname = domain.name
-    match = re.search(hostname, url)
-    return 1 if match else -1
+    if isinstance(domain.domain_name, list):
+        hostname = domain.domain_name[0]
+    else:
+        hostname = domain.domain_name
+    if hostname is None:
+        return -1
+    match = re.search(hostname.lower(), url)
+    return -1 if match is None else 1
 
 
 def i_frame(soup):
@@ -229,8 +234,14 @@ def i_frame(soup):
 
 
 def age_of_domain(domain):
-    creation_date = domain.creation_date
-    expiration_date = domain.expiration_date
+    if isinstance(domain.creation_date,list):
+        creation_date = domain.creation_date[0]
+    else:
+        creation_date = domain.creation_date
+    if isinstance(domain.expiration_date,list):
+        expiration_date = domain.expiration_date[0]
+    else:
+        expiration_date = domain.expiration_date
     ageofdomain = 0
     if expiration_date:
         ageofdomain = abs((expiration_date - creation_date).days)
@@ -241,8 +252,7 @@ def web_traffic(url):
     try:
         with urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url=" + url) as url:
             site = url.read()
-            rank = \
-                bs4.BeautifulSoup(site, "xml").find(
+            rank = BeautifulSoup(site, features="xml").find(
                     "REACH")['RANK']
     except TypeError:
         return -1
@@ -280,7 +290,7 @@ def statistical_report(url, hostname):
 
 def get_hostname_from_url(url):
     hostname = url
-    pattern = "https://|http://|www.|https://www.|http://www."
+    pattern = "https://www.|http://www.|https://|http://|www."
     pre_pattern_match = re.search(pattern, hostname)
 
     if pre_pattern_match:
@@ -291,6 +301,13 @@ def get_hostname_from_url(url):
 
     return hostname
 
+
+def get_domain_from_hostname(hostname):
+    try:
+        domain = whois.whois(hostname)
+    except:
+        domain = -1
+    return domain
 
 
 def main(url):
@@ -310,13 +327,9 @@ def main(url):
     status.append(prefix_suffix(hostname))
     status.append(having_sub_domain(url))
 
-    dns = 1
-    try:
-        domain = whois.query(hostname)
-    except:
-        dns = -1
+    domain = get_domain_from_hostname(hostname)
 
-    status.append(-1 if dns == -1 else domain_registration_length(domain))
+    status.append(-1 if domain == -1 else domain_registration_length(domain))
 
     status.append(favicon(url, soup, hostname))
     status.append(https_token(url))
@@ -326,15 +339,15 @@ def main(url):
     status.append(sfh(url, soup, hostname))
     status.append(submitting_to_email(soup))
 
-    status.append(-1 if dns == -1 else abnormal_url(domain, url))
+    status.append(-1 if domain == -1 else abnormal_url(domain, url))
 
     status.append(i_frame(soup))
 
-    status.append(-1 if dns == -1 else age_of_domain(domain))
+    status.append(-1 if domain == -1 else age_of_domain(domain))
 
-    status.append(dns)
+    status.append(-1 if domain == -1 else 1)
 
-    status.append(web_traffic(soup))
+    status.append(web_traffic(url))
     status.append(google_index(url))
     status.append(statistical_report(url, hostname))
 
@@ -345,6 +358,3 @@ def main(url):
     #  '17. IFrame\n18. Age of Domain\n19. DNS Record\n20. Web Traffic\n21. Google Index\n22. Statistical Reports\n')
     # print(status)
     return status
-
-
-

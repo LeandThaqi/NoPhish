@@ -30,7 +30,7 @@ features = data1[:, :-1]
 
 
 # Choose only the relevant features from the data set.
-features = features[:, [0, 1, 2, 3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 22, 23, 24, 25, 27, 29]]
+features = features[:, [0, 1, 2, 3, 4, 5, 6, 9, 11, 12, 13, 14, 15, 16, 17, 22, 23, 24, 25, 27, 29]]
 
 
 features = np.array(features).astype(np.float)
